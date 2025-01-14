@@ -1,6 +1,7 @@
+from django.db import models
+
 from brands.models import Brand
 from categories.models import Category
-from django.db import models
 from services.basemodel import BaseModel
 
 

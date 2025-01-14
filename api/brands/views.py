@@ -1,6 +1,8 @@
 from rest_framework import viewsets
-from .serializers import BrandSerializer
+
 from .models import Brand
+from .serializers import BrandSerializer
+
 
 class BrandViewSet(viewsets.ModelViewSet):
 

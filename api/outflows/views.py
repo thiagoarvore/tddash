@@ -1,6 +1,8 @@
 from rest_framework import viewsets
-from .serializers import OutflowSerializer
+
 from .models import Outflow
+from .serializers import OutflowSerializer
+
 
 class OutflowViewSet(viewsets.ModelViewSet):
 

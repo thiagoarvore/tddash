@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+
 from services.basemodel import BaseModel
 
 
