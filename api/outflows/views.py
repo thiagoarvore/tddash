@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .serializers import OutflowSerializer
+from .models import Outflow
 
-# Create your views here.
+class OutflowViewSet(viewsets.ModelViewSet):
+
+    serializer_class = OutflowSerializer
+    queryset = Outflow.objects.all()

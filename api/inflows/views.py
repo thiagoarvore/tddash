@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .serializers import InflowSerializer
+from .models import Inflow
 
-# Create your views here.
+class InflowViewSet(viewsets.ModelViewSet):
+
+    serializer_class = InflowSerializer
+    queryset = Inflow.objects.all()
