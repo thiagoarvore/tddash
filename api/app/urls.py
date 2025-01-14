@@ -17,4 +17,4 @@ router.register(r"products", ProductViewSet, basename="product")
 router.register(r"inflows", InflowViewSet, basename="inflow")
 router.register(r"outflows", OutflowViewSet, basename="outflow")
 
-urlpatterns = [path("admin/", admin.site.urls), path("", include(router.urls))]
+urlpatterns = [path("admin/", admin.site.urls), path("api/v1/", include(router.urls))]

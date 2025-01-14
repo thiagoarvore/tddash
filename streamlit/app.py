@@ -1,4 +1,5 @@
 import streamlit as st
+from storage.page import show_storage
 
 def main():
     st.title('Think Digital')
@@ -12,7 +13,7 @@ def main():
         pass
 
     if menu_option == 'Inventário':
-        pass
+        show_storage()
 
 if __name__ == '__main__':
     main()
