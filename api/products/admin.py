@@ -5,5 +5,5 @@ from .models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "quantity", "category", "brand", "serial_number", "mac")
+    list_display = ("name", "quantity", "category", "brand")
     search_fields = ("name", "category", "brand")

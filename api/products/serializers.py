@@ -1,8 +1,8 @@
+from brands.serializers import Brand, BrandSerializer
+from categories.serializers import Category, CategorySerializer
 from rest_framework import serializers
 
 from .models import Product
-from brands.serializers import Brand, BrandSerializer
-from categories.serializers import Category, CategorySerializer
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -11,17 +11,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = (
-            "name",
-            "brand",
-            "category",
-            "quantity",
-            "serial_number",
-            "mac",
-            'id'
-        )
-        read_only_fields = ('id', 'quantity')
-    
+        fields = ("name", "brand", "category", "quantity", "id")
+        read_only_fields = ("id", "quantity")
+
     def to_representation(self, instance):
         """Personaliza a saída para exibir detalhes no GET"""
         representation = super().to_representation(instance)

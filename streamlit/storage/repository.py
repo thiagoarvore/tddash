@@ -1,11 +1,13 @@
 import requests
+
 import streamlit as st
+
 
 class BrandRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__brands_url = f'{self.__base_url}brands/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__brands_url = f"{self.__base_url}brands/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
@@ -20,8 +22,10 @@ class BrandRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code}"
+        )
+
     def create_brand(self, brand):
         response = requests.post(
             self.__brands_url,
@@ -33,14 +37,16 @@ class BrandRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+        )
+
 
 class CategoryRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__categories_url = f'{self.__base_url}categories/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__categories_url = f"{self.__base_url}categories/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
@@ -55,8 +61,10 @@ class CategoryRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code}"
+        )
+
     def create_category(self, category):
         response = requests.post(
             self.__categories_url,
@@ -68,14 +76,16 @@ class CategoryRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+        )
+
 
 class SupplierRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__suppliers_url = f'{self.__base_url}suppliers/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__suppliers_url = f"{self.__base_url}suppliers/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
@@ -90,27 +100,31 @@ class SupplierRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
+        )
+
     def create_supplier(self, supplier):
         response = requests.post(
-            self.__suppliers_url,
+            url=self.__suppliers_url,
             # headers=self.__headers,
             data=supplier,
         )
         if response.status_code == 201:
             return response.json()
-        # if response.status_code == 401:
-        #     logout()
-        #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
+        if response.status_code == 401:
+            st.error("nao autorizado")
+            return None
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+        )
 
 
 class ProductRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__products_url = f'{self.__base_url}products/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__products_url = f"{self.__base_url}products/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
@@ -125,9 +139,12 @@ class ProductRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code}"
+        )
+
     def create_product(self, product):
+        print(product["brand"])
         response = requests.post(
             self.__products_url,
             # headers=self.__headers,
@@ -138,14 +155,16 @@ class ProductRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
+        )
 
 
 class InflowRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__inflows_url = f'{self.__base_url}inflows/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__inflows_url = f"{self.__base_url}inflows/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
@@ -160,8 +179,10 @@ class InflowRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code}"
+        )
+
     def create_inflow(self, inflow):
         response = requests.post(
             self.__inflows_url,
@@ -173,19 +194,21 @@ class InflowRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
+        )
 
 
 class OutflowRepository:
 
     def __init__(self):
-        self.__base_url = 'http://localhost:8000/api/v1/'
-        self.__outflows_url = f'{self.__base_url}outflows/'
+        self.__base_url = "http://localhost:8000/api/v1/"
+        self.__outflows_url = f"{self.__base_url}outflows/"
         # self.__headers = {
         #     'Authorization': f'Bearer {st.session_state.token}'
         # }
 
-    def get_products(self):
+    def get_outflows(self):
         response = requests.get(
             self.__outflows_url,
             # headers=self.__headers
@@ -195,8 +218,10 @@ class OutflowRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao obter dados da API. Status code: {response.status_code}')
-    
+        raise Exception(
+            f"Erro ao obter dados da API. Status code: {response.status_code}"
+        )
+
     def create_outflow(self, outflow):
         response = requests.post(
             self.__outflows_url,
@@ -208,4 +233,6 @@ class OutflowRepository:
         # if response.status_code == 401:
         #     logout()
         #     return None
-        raise Exception(f'Erro ao cadastrar dados na API. Status code: {response.status_code}')
+        raise Exception(
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+        )

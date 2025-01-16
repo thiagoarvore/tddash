@@ -1,5 +1,4 @@
 from django.db import models
-
 from products.models import Product
 from services.basemodel import BaseModel
 from suppliers.models import Supplier

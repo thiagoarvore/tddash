@@ -1,7 +1,6 @@
-from django.db import models
-
 from brands.models import Brand
 from categories.models import Category
+from django.db import models
 from services.basemodel import BaseModel
 
 
@@ -11,8 +10,6 @@ class Product(BaseModel):
         Category, on_delete=models.PROTECT, related_name="products"
     )
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name="products")
-    serial_number = models.CharField(max_length=100, null=True, blank=True)
-    mac = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
