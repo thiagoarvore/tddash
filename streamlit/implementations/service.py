@@ -25,6 +25,7 @@ class ImplementationService:
         cnpj,
         unit,
         building_area,
+        solution,
         license,
         license_expiration_date,
         status,
@@ -57,6 +58,7 @@ class ImplementationService:
             status=status,
             license=license,
             license_expiration_date=license_expiration_date,
+            solution=solution
         )
         new_implementation = self.implementation_repository.create_implementation(
             implementation

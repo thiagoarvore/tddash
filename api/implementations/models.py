@@ -11,6 +11,10 @@ STATUS_OPTIONS = {
     "Concluída": "Concluída",
     "Bloqueada": "Bloqueada",
 }
+SOLUTIONS_OPTIONS = {
+    "Zoox Wi-fi": "Zoox Wi-fi",
+    "Propz": "Propz",
+}
 
 
 class Implementation(BaseModel):
@@ -24,6 +28,7 @@ class Implementation(BaseModel):
     unit = models.CharField(max_length=50, default="Sede")
     address = models.CharField(max_length=300)
     building_area = models.CharField(max_length=200)
+    solution = models.CharField(max_length=40, choices=SOLUTIONS_OPTIONS, default="Zoox Wi-Fi")
     license = models.CharField(max_length=50, default="unknow")
     license_expiration_date = models.DateField(default="2025-12-31")
     status = models.CharField(

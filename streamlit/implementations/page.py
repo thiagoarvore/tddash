@@ -30,6 +30,7 @@ def show_implementations():
         client_search_term = st.text_input("Buscar por cliente", "").lower()
         serial_search_term = st.text_input("Buscar por número de série", "").lower()
         mac_search_term = st.text_input("Buscar por MAC", "").lower()
+        solution_search_term = st.text_input("Buscar por solução", "").lower()
 
         filtered_df = implementations_df  # Começa com o DataFrame completo
 
@@ -54,6 +55,12 @@ def show_implementations():
         if mac_search_term:
             filtered_df = filtered_df[
                 filtered_df["mac"].str.contains(mac_search_term, case=False, na=False)
+            ]
+        if solution_search_term:
+            filtered_df = filtered_df[
+                filtered_df["solution"].str.contains(
+                    solution_search_term, case=False, na=False
+                )
             ]
 
         AgGrid(
@@ -98,7 +105,13 @@ def show_implementations():
         ],
         label="Status",
     )
-
+    solution = st.selectbox(
+        options=[
+            "Zoox Wi-fi",
+            "Propz",
+        ],
+        label="Solução",
+    )
     license = st.text_input("Licença")
     license_expiration_date = st.date_input("Data de validade da licença")
 
@@ -124,6 +137,7 @@ def show_implementations():
             billing_date=billing_date,
             unit=unit,
             cnpj=cnpj,
+            solution=solution,
             management=management,
             license=license,
             license_expiration_date=license_expiration_date,

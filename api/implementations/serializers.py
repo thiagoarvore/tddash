@@ -19,6 +19,7 @@ class ImplementationSerializer(serializers.ModelSerializer):
             "serial_number",
             "mac",
             "id",
+            "solution",
             "license",
             "license_expiration_date",
             "status",
