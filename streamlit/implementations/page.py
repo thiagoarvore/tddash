@@ -1,6 +1,6 @@
 import pandas as pd
 from st_aggrid import AgGrid, ExcelExportMode
-from storage.service import ProductService
+from storage.service import ProductService, SupplierService
 
 import streamlit as st
 
@@ -22,6 +22,7 @@ def show_implementations():
                 "id",
                 "product.id",
                 "product.quantity",
+                'supplier.id'
             ],
             errors="ignore",
         )
@@ -78,78 +79,136 @@ def show_implementations():
         st.write("Nenhum produto implementado encontrado.")
 
     st.title("Cadastrar implementação")
-    if "validated_client" not in st.session_state:
-        st.session_state.validated_client = False
+    supplier_service = SupplierService()
+    suppliers = supplier_service.get_suppliers()
+    supplier_list = {supplier['name']: supplier['id'] for supplier in suppliers}
+    selected_supplier = st.selectbox('Fornecedor', list(supplier_list.keys()))
 
     product_service = ProductService()
     products = product_service.get_products()
     product_list = {product["name"]: product["id"] for product in products}
-    selected_product_name = st.selectbox("Produto", list(product_list.keys()))
+    
+    if selected_supplier:
+        selected_product_name = st.selectbox("Produto", list(product_list.keys()))
 
-    serial_number = st.text_input("Número de série")
-    mac = st.text_input("MAC")
+        serial_number = st.text_input("Número de série")
+        mac = st.text_input("MAC")
 
-    client = st.text_input("Nome do cliente")
-    cnpj = st.text_input("CNPJ")
-    unit = st.text_input("Unidade")
-    address = st.text_input("Endereço da implementação")
-    building_area = st.text_input("Área que o equipamento está implementado")
+        client = st.text_input("Nome do cliente")
+        cnpj = st.text_input("CNPJ")
+        unit = st.text_input("Unidade")
+        address = st.text_input("Endereço da implementação")
+        building_area = st.text_input("Área que o equipamento está implementado")
 
-    status = st.selectbox(
-        options=[
-            "Não iniciado",
-            "Implementação",
-            "Validação cliente",
-            "Concluída",
-            "Bloqueada",
-        ],
-        label="Status",
-    )
-    solution = st.selectbox(
-        options=[
-            "Zoox Wi-fi",
-            "Propz",
-        ],
-        label="Solução",
-    )
-    license = st.text_input("Licença")
-    license_expiration_date = st.date_input("Data de validade da licença")
+        status = st.selectbox(
+            options=[
+                "Não iniciado",
+                "Implementação",
+                "Validação cliente",
+                "Concluída",
+                "Bloqueada",
+            ],
+            label="Status",
+        )
+        solution = st.selectbox(
+            options=[
+                "Zoox Wi-fi",
+                "Propz",
+            ],
+            label="Solução",
+        )
+        license = st.text_input("Licença")
+        license_expiration_date = st.date_input("Data de validade da licença")
 
-    management = st.selectbox(options=["Cliente", "Think digital"], label="Gestão")
+        management = st.selectbox(options=["Cliente", "Think Digital"], label="Gestão")
 
-    billing_date = st.date_input("Data de Corte")
+        billing_date = st.date_input("Data de Corte")
 
-    unifi_access = st.text_input("Acesso Unifi (apenas para Unifi)")
-    unifi_password = st.text_input("Senha Unifi (apenas para Unifi)", type="password")
-    unifi_url_controller = st.text_input("Unifi URL Controller (apenas para Unifi)")
-    unifi_management_ip = st.text_input("Unifi Management IP (apenas para Unifi)")
-    unifi_observations = st.text_area("Observações Unifi (apenas para Unifi)")
-    unifi_site_unity = st.text_input("Unifi site unity (apenas para Unifi)")
+        if selected_supplier.lower() == 'unifi':
+
+            unifi_access = st.text_input("Acesso Unifi (apenas para Unifi)")
+            unifi_password = st.text_input("Senha Unifi (apenas para Unifi)", type="password")
+            unifi_url_controller = st.text_input("Unifi URL Controller (apenas para Unifi)")
+            unifi_management_ip = st.text_input("Unifi Management IP (apenas para Unifi)")
+            unifi_observations = st.text_area("Observações Unifi (apenas para Unifi)")
+            unifi_site_unity = st.text_input("Unifi site unity (apenas para Unifi)")
 
     if st.button("Cadastrar"):
-        new_implementation = implementation_service.create_implementation(
-            product=product_list[selected_product_name],
-            serial_number=serial_number,
-            mac=mac,
-            client=client,
-            address=address,
-            building_area=building_area,
-            billing_date=billing_date,
-            unit=unit,
-            cnpj=cnpj,
-            solution=solution,
-            management=management,
-            license=license,
-            license_expiration_date=license_expiration_date,
-            status=status,
-            unifi_access=unifi_access,
-            unifi_password=unifi_password,
-            unifi_url_controller=unifi_url_controller,
-            unifi_observations=unifi_observations,
-            unifi_management_ip=unifi_management_ip,
-            unifi_site_unity=unifi_site_unity,
-        )
+        if not serial_number:
+            st.error("O número de série é obrigatório!")
+            return
+        if not mac:
+            st.error("O MAC é obrigatório!")
+            return
+        if not selected_supplier:
+            st.error("O fornecedor é obrigatório!")
+            return
+        if not selected_product_name:
+            st.error("O produto é obrigatório!")
+            return
+        if not client:
+            st.error("O cliente é obrigatório!")
+            return
+        if not cnpj:
+            st.error("O CNPJ é obrigatório!")
+            return
+        if not address:
+            st.error("O endereço é obrigatório!")
+            return
+        if not building_area:
+            st.error("A área na qual o equipamento está implantado é obrigatório!")
+            return
+        if not license:
+            st.error("A licença é obrigatório!")
+            return
+        if not license_expiration_date:
+            st.error("a data de validade da licença é obrigatório!")
+            return
+
+        if selected_product_name.lower() == 'unifi':
+            new_implementation = implementation_service.create_implementation(
+                product=product_list[selected_product_name],
+                serial_number=serial_number,
+                supplier=selected_supplier,
+                mac=mac,
+                client=client,
+                address=address,
+                building_area=building_area,
+                billing_date=billing_date,
+                unit=unit,
+                cnpj=cnpj,
+                solution=solution,
+                management=management,
+                license=license,
+                license_expiration_date=license_expiration_date,
+                status=status,
+                unifi_access=unifi_access,
+                unifi_password=unifi_password,
+                unifi_url_controller=unifi_url_controller,
+                unifi_observations=unifi_observations,
+                unifi_management_ip=unifi_management_ip,
+                unifi_site_unity=unifi_site_unity,
+            )
+        else:
+            new_implementation = implementation_service.create_implementation(
+                product=product_list[selected_product_name],
+                serial_number=serial_number,
+                mac=mac,
+                client=client,
+                supplier=supplier_list[selected_supplier],
+                address=address,
+                building_area=building_area,
+                billing_date=billing_date,
+                unit=unit,
+                cnpj=cnpj,
+                solution=solution,
+                management=management,
+                license=license,
+                license_expiration_date=license_expiration_date,
+                status=status,
+            )
         if new_implementation:
-            st.rerun()
+            st.success('Implementação cadastrada!')
+            return
         else:
             st.error("Erro ao cadastrar a implementação. Verifique os campos")

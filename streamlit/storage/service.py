@@ -72,13 +72,11 @@ class ProductService:
         st.session_state.products = products
         return products
 
-    def create_product(self, name, category, brand, serial_number, mac):
+    def create_product(self, name, category, brand):
         product = dict(
             name=name,
             category=category,
             brand=brand,
-            serial_number=serial_number,
-            mac=mac,
         )
         new_product = self.product_repository.create_product(product)
         st.session_state.products.append(new_product)

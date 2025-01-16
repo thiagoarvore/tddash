@@ -22,6 +22,8 @@ def show_brands():
             enableFilter=True,
             columns_auto_size_mode=True,
             excel_export_mode=ExcelExportMode.MANUAL,
+            pagination=True,
+            paginationPageSize=20,
         )
 
     else:
@@ -31,14 +33,19 @@ def show_brands():
 
     name = st.text_input("Nome da marca")
 
-    if st.button("Cadastrar", key="create_brand"):
+    if st.button("Cadastrar"):
+        if not name:
+            st.error("O nome é obrigatório!")
+            return
         new_brand = brand_service.create_brand(
             name=name,
         )
         if new_brand:
-            st.rerun()
+            st.success('Marca cadastrada!')
+            return
         else:
             st.error("Erro ao cadastrar a marca. Verifique os campos")
+            return
 
 
 def show_categories():
@@ -57,6 +64,8 @@ def show_categories():
             enableFilter=True,
             columns_auto_size_mode=True,
             excel_export_mode=ExcelExportMode.MANUAL,
+            pagination=True,
+            paginationPageSize=20,
         )
 
     else:
@@ -67,14 +76,18 @@ def show_categories():
     name = st.text_input("Nome da categoria")
 
     if st.button("Cadastrar"):
+        if not name:
+            st.error("O nome é obrigatório!")
+            return
         new_category = categories_service.create_category(
             name=name,
         )
         if new_category:
             st.success("Categoria cadastrada")
-            st.rerun()
+            return
         else:
             st.error("Erro ao cadastrar a categoria. Verifique os campos")
+            return
 
 
 def show_suppliers():
@@ -93,6 +106,8 @@ def show_suppliers():
             enableFilter=True,
             columns_auto_size_mode=True,
             excel_export_mode=ExcelExportMode.MANUAL,
+            pagination=True,
+            paginationPageSize=20,
         )
 
     else:
@@ -103,14 +118,19 @@ def show_suppliers():
     name = st.text_input("Nome do fornecedor")
 
     if st.button("Cadastrar"):
+        if not name:
+            st.error("O nome é obrigatório!")
+            return
+
         new_supplier = suppliers_service.create_supplier(
             name=name,
         )
         if new_supplier:
             st.success("Fornecedor cadastrado")
-            st.rerun()
+            return
         else:
             st.error("Erro ao cadastrar fornecedor. Verifique os campos")
+            return
 
 
 def show_products():
@@ -156,6 +176,8 @@ def show_products():
             enableFilter=True,
             columns_auto_size_mode=True,
             excel_export_mode=ExcelExportMode.MANUAL,
+            pagination=True,
+            paginationPageSize=20,
         )
 
     else:
@@ -175,6 +197,10 @@ def show_products():
     selected_category_name = st.selectbox("Categoria", list(category_list.keys()))
 
     if st.button("Cadastrar"):
+        if not name:
+            st.error("O nome do produto obrigatório!")
+            return
+
         new_product = products_service.create_product(
             name=name,
             brand=brand_list[selected_brand_name],
@@ -182,10 +208,10 @@ def show_products():
         )
         if new_product:
             st.success("Produto cadastrado")
-            st.rerun()
+            return
         else:
             st.error("Erro ao cadastrar produto. Verifique os campos")
-
+            return
 
 def show_inflows():
     inflows_service = service.InflowService()
@@ -246,6 +272,8 @@ def show_inflows():
             enableFilter=True,
             columns_auto_size_mode=True,
             excel_export_mode=ExcelExportMode.MANUAL,
+            pagination=True,
+            paginationPageSize=20,
         )
 
     else:
@@ -267,6 +295,12 @@ def show_inflows():
     cost_price = st.text_input("Preço (use ponto ao invés de vírgula)")
 
     if st.button("Cadastrar"):
+        if not quantity:
+            st.error("A quantidade é obrigatório!")
+            return
+        if not cost_price:
+            st.error("O preço é obrigatório!")
+            return
         new_inflow = inflows_service.create_inflow(
             product=product_list[selected_product_name],
             supplier=supplier_list[selected_supplier_name],
@@ -275,9 +309,10 @@ def show_inflows():
         )
         if new_inflow:
             st.success("Entrada cadastrada")
-            st.rerun()
+            return
         else:
             st.error("Erro ao cadastrar entrada. Verifique os campos")
+            return
 
 
 def show_outflows():
@@ -355,6 +390,10 @@ def show_outflows():
     implemented = st.checkbox("Produto implementado?")
 
     if st.button("Cadastrar"):
+        if not quantity:
+            st.error("A quantidade é obrigatório!")
+            return
+
         new_outflow = outflows_service.create_outflow(
             product=product_list[selected_product_name],
             implemented=implemented,
@@ -363,6 +402,7 @@ def show_outflows():
         )
         if new_outflow:
             st.success("Saída cadastrada")
-            st.rerun()
+            return
         else:
             st.error("Erro ao cadastrar saída. Verifique os campos")
+            return

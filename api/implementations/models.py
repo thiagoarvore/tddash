@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 from products.models import Product
+from suppliers.models import Supplier
 from services.basemodel import BaseModel
 
 MANAGEMENT_OPTION = {"Cliente": "Cliente", "Think Digital": "Think Digital"}
@@ -25,9 +26,10 @@ class Implementation(BaseModel):
     mac = models.CharField(max_length=100, null=True, blank=True)
     client = models.CharField(max_length=200)
     cnpj = models.CharField(max_length=20, default="unknow")
-    unit = models.CharField(max_length=50, default="Sede")
+    unit = models.CharField(max_length=50, default="Sede", blank=True, null=True)
     address = models.CharField(max_length=300)
     building_area = models.CharField(max_length=200)
+    supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT, related_name='implementations', default=None, blank=True, null=True)
     solution = models.CharField(max_length=40, choices=SOLUTIONS_OPTIONS, default="Zoox Wi-Fi")
     license = models.CharField(max_length=50, default="unknow")
     license_expiration_date = models.DateField(default="2025-12-31")
@@ -37,7 +39,7 @@ class Implementation(BaseModel):
     management = models.CharField(
         max_length=30, choices=MANAGEMENT_OPTION, default="Think Digital"
     )
-    billing_date = models.DateField(default="2025-12-31")
+    billing_date = models.DateField(default="2025-12-31", blank=True, null=True)
     unifi_url_controller = models.CharField(
         max_length=500, default="unknow", blank=True, null=True
     )

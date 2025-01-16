@@ -1,4 +1,5 @@
 from products.serializers import Product, ProductSerializer
+from suppliers.serializers import Supplier, SupplierSerializer
 from rest_framework import serializers
 
 from .models import Implementation
@@ -6,7 +7,7 @@ from .models import Implementation
 
 class ImplementationSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
-
+    supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
     class Meta:
         model = Implementation
         fields = (
@@ -32,12 +33,14 @@ class ImplementationSerializer(serializers.ModelSerializer):
             "unifi_management_ip",
             "unifi_observations",
             "days_to_expires",
+            'supplier'
         )
-        read_only_fields = ("id", "days_to_expires")
+        read_only_fields = ("id", "days_to_expires", 'supplier')
 
     def to_representation(self, instance):
         """Personaliza a saída para exibir detalhes no GET"""
         representation = super().to_representation(instance)
         # Adiciona detalhes completos para brand e category
         representation["product"] = ProductSerializer(instance.product).data
+        representation["supplier"] = SupplierSerializer(instance.supplier).data
         return representation
