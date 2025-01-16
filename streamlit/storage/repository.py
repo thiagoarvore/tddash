@@ -23,7 +23,7 @@ class BrandRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_brand(self, brand):
@@ -38,7 +38,7 @@ class BrandRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
         )
 
 
@@ -62,7 +62,7 @@ class CategoryRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_category(self, category):
@@ -77,7 +77,7 @@ class CategoryRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
         )
 
 
@@ -116,7 +116,7 @@ class SupplierRepository:
             st.error("nao autorizado")
             return None
         raise Exception(
-            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
         )
 
 
@@ -140,7 +140,7 @@ class ProductRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_product(self, product):
@@ -180,7 +180,7 @@ class InflowRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_inflow(self, inflow):
@@ -219,7 +219,7 @@ class OutflowRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_outflow(self, outflow):
@@ -234,5 +234,5 @@ class OutflowRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao cadastrar dados na API. Status code: {response.status_code}"
+            f"Erro ao cadastrar dados na API. Status code: {response.status_code} {response.text}"
         )

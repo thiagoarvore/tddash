@@ -1,4 +1,5 @@
 import pandas as pd
+from accounts.service import AccountsService
 from st_aggrid import AgGrid, ExcelExportMode
 from storage.service import ProductService, SupplierService
 
@@ -22,7 +23,21 @@ def show_implementations():
                 "id",
                 "product.id",
                 "product.quantity",
-                'supplier.id'
+                "supplier.id",
+                "account_manager.id",
+                "account_manager.password",
+                "account_manager.last_login",
+                "account_manager.is_superuser",
+                "account_manager.username",
+                "account_manager.is_staff",
+                "account_manager.is_active",
+                "account_manager.date_joined",
+                "account_manager.groups",
+                "account_manager.user_permissions",
+                "account_manager.first_name",
+                "account_manager.last_name",
+                "account_manager.created_at",
+                "account_manager.updated_at",
             ],
             errors="ignore",
         )
@@ -79,16 +94,24 @@ def show_implementations():
         st.write("Nenhum produto implementado encontrado.")
 
     st.title("Cadastrar implementação")
+    account_service = AccountsService()
+    accounts = account_service.get_accounts()
+    account_list = {
+        f"{account['first_name']} {account['last_name']}": account["id"]
+        for account in accounts
+    }
+
     supplier_service = SupplierService()
     suppliers = supplier_service.get_suppliers()
-    supplier_list = {supplier['name']: supplier['id'] for supplier in suppliers}
-    selected_supplier = st.selectbox('Fornecedor', list(supplier_list.keys()))
+    supplier_list = {supplier["name"]: supplier["id"] for supplier in suppliers}
+    selected_supplier = st.selectbox("Fornecedor", list(supplier_list.keys()))
 
     product_service = ProductService()
     products = product_service.get_products()
     product_list = {product["name"]: product["id"] for product in products}
-    
+
     if selected_supplier:
+        selected_account = st.selectbox("Account manager", list(account_list.keys()))
         selected_product_name = st.selectbox("Produto", list(product_list.keys()))
 
         serial_number = st.text_input("Número de série")
@@ -124,12 +147,18 @@ def show_implementations():
 
         billing_date = st.date_input("Data de Corte")
 
-        if selected_supplier.lower() == 'unifi':
+        if selected_supplier.lower() == "unifi":
 
             unifi_access = st.text_input("Acesso Unifi (apenas para Unifi)")
-            unifi_password = st.text_input("Senha Unifi (apenas para Unifi)", type="password")
-            unifi_url_controller = st.text_input("Unifi URL Controller (apenas para Unifi)")
-            unifi_management_ip = st.text_input("Unifi Management IP (apenas para Unifi)")
+            unifi_password = st.text_input(
+                "Senha Unifi (apenas para Unifi)", type="password"
+            )
+            unifi_url_controller = st.text_input(
+                "Unifi URL Controller (apenas para Unifi)"
+            )
+            unifi_management_ip = st.text_input(
+                "Unifi Management IP (apenas para Unifi)"
+            )
             unifi_observations = st.text_area("Observações Unifi (apenas para Unifi)")
             unifi_site_unity = st.text_input("Unifi site unity (apenas para Unifi)")
 
@@ -164,9 +193,13 @@ def show_implementations():
         if not license_expiration_date:
             st.error("a data de validade da licença é obrigatório!")
             return
+        if not selected_account:
+            st.error("O responsável pela conta é obrigatório!")
+            return
 
-        if selected_product_name.lower() == 'unifi':
+        if selected_product_name.lower() == "unifi":
             new_implementation = implementation_service.create_implementation(
+                account_manager=account_list[selected_account],
                 product=product_list[selected_product_name],
                 serial_number=serial_number,
                 supplier=selected_supplier,
@@ -191,6 +224,7 @@ def show_implementations():
             )
         else:
             new_implementation = implementation_service.create_implementation(
+                account_manager=account_list[selected_account],
                 product=product_list[selected_product_name],
                 serial_number=serial_number,
                 mac=mac,
@@ -208,7 +242,7 @@ def show_implementations():
                 status=status,
             )
         if new_implementation:
-            st.success('Implementação cadastrada!')
+            st.success("Implementação cadastrada!")
             return
         else:
             st.error("Erro ao cadastrar a implementação. Verifique os campos")

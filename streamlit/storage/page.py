@@ -41,7 +41,7 @@ def show_brands():
             name=name,
         )
         if new_brand:
-            st.success('Marca cadastrada!')
+            st.success("Marca cadastrada!")
             return
         else:
             st.error("Erro ao cadastrar a marca. Verifique os campos")
@@ -212,6 +212,7 @@ def show_products():
         else:
             st.error("Erro ao cadastrar produto. Verifique os campos")
             return
+
 
 def show_inflows():
     inflows_service = service.InflowService()

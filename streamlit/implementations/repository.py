@@ -21,7 +21,7 @@ class ImplementationRepository:
         #     logout()
         #     return None
         raise Exception(
-            f"Erro ao obter dados da API. Status code: {response.status_code}"
+            f"Erro ao obter dados da API. Status code: {response.status_code} {response.text}"
         )
 
     def create_implementation(self, implementation):

@@ -1,6 +1,7 @@
 from brands.models import Brand
 from categories.models import Category
 from django.db import models
+from django.db.models import UniqueConstraint
 from services.basemodel import BaseModel
 
 
@@ -13,6 +14,12 @@ class Product(BaseModel):
 
     class Meta:
         ordering = ["name"]
+        constraints = [
+            UniqueConstraint(
+                fields=["name", "category", "brand"],
+                name="unique_product_per_category_and_brand",
+            )
+        ]
 
     @property
     def quantity(self):

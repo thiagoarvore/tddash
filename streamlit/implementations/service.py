@@ -17,6 +17,7 @@ class ImplementationService:
 
     def create_implementation(
         self,
+        account_manager,
         product,
         serial_number,
         supplier,
@@ -40,6 +41,7 @@ class ImplementationService:
         unifi_observations=None,
     ):
         implementation = dict(
+            account_manager=account_manager,
             product=product,
             serial_number=serial_number,
             mac=mac,
@@ -60,7 +62,7 @@ class ImplementationService:
             status=status,
             license=license,
             license_expiration_date=license_expiration_date,
-            solution=solution
+            solution=solution,
         )
         new_implementation = self.implementation_repository.create_implementation(
             implementation

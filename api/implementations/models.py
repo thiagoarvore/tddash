@@ -1,8 +1,9 @@
+from accounts.models import User
 from django.db import models
 from django.utils.timezone import now
 from products.models import Product
-from suppliers.models import Supplier
 from services.basemodel import BaseModel
+from suppliers.models import Supplier
 
 MANAGEMENT_OPTION = {"Cliente": "Cliente", "Think Digital": "Think Digital"}
 STATUS_OPTIONS = {
@@ -19,6 +20,14 @@ SOLUTIONS_OPTIONS = {
 
 
 class Implementation(BaseModel):
+    account_manager = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="implementations",
+        blank=True,
+        null=True,
+        default=None,
+    )
     product = models.ForeignKey(
         Product, on_delete=models.PROTECT, related_name="implementations"
     )
@@ -28,9 +37,22 @@ class Implementation(BaseModel):
     cnpj = models.CharField(max_length=20, default="unknow")
     unit = models.CharField(max_length=50, default="Sede", blank=True, null=True)
     address = models.CharField(max_length=300)
-    building_area = models.CharField(max_length=200)
-    supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT, related_name='implementations', default=None, blank=True, null=True)
-    solution = models.CharField(max_length=40, choices=SOLUTIONS_OPTIONS, default="Zoox Wi-Fi")
+    building_area = models.CharField(max_length=200, blank=True, null=True)
+    supplier = models.ForeignKey(
+        Supplier,
+        on_delete=models.PROTECT,
+        related_name="implementations",
+        default=None,
+        blank=True,
+        null=True,
+    )
+    solution = models.CharField(
+        max_length=40,
+        choices=SOLUTIONS_OPTIONS,
+        default="Zoox Wi-Fi",
+        blank=True,
+        null=True,
+    )
     license = models.CharField(max_length=50, default="unknow")
     license_expiration_date = models.DateField(default="2025-12-31")
     status = models.CharField(
